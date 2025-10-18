@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+</head>
+<body>
+    <!-- Contenedor principal del formulario de inicio de sesión -->
+    <div class="container">
+        <h2>Iniciar Sesión</h2>
+        <!-- Formulario de inicio de sesión -->
+        <!-- action="/login": ruta donde se enviarán los datos mediante POST al servidor -->
+        <!-- method="POST": los datos se envían en el cuerpo de la petición (más seguro que GET para credenciales) -->
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <!-- Campo de correo electrónico -->
+                <!-- type="email" activa la validación de formato en el navegador -->
+                <!-- name="email" es la clave que recibirá el servidor en $_POST['email'] -->
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com">
+            </div>
+            <div class="form-group">
+                <!-- Campo de contraseña -->
+                <!-- type="password" oculta lo escrito; minlength ayuda a usar contraseñas mínimas desde el cliente -->
+                <!-- name="password" es la clave que recibirá el servidor en $_POST['password'] -->
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required minlength="6">
+            </div>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+    <p class="signup-link">¿No tienes cuenta? <a class="btn-register" href="registrarse.html">Registrarse</a></p>
+    </div>
+
+    <!-- Estilos incluidos en la propia página para facilitar edición rápida -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+    /* Estilos globales del cuerpo: tipografía, fondo y centrado del formulario */
+    body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dbdce4 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+    /* .container: caja principal blanca que contiene el formulario; se usa max-width para adaptarse en móviles */
+    .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        h2 {
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        
+    /* Estilo base para inputs: ancho completo y padding para mejor usabilidad táctil */
+    input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        input:invalid {
+            border-color: #e74c3c;
+        }
+        
+    /* Estilo del botón de envío: ocupa todo el ancho y tiene gradiente visual */
+    button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* Enlace para registrarse (se muestra debajo del formulario) */
+        .signup-link {
+            margin-top: 20px;
+            color: #666;
+        }
+        /* Estilo para que el enlace de registrarse parezca un botón */
+        .btn-register {
+            display: inline-block;
+            padding: 8px 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .btn-register:focus,
+        .btn-register:hover {
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+    <script>
+        // Validación de email en tiempo real (cliente)
+        // Objetivo: ayudar al usuario a corregir errores antes de enviar el formulario.
+        // IMPORTANTE: esta validación NO sustituye la validación en el servidor.
+        const emailInput = document.getElementById('email');
+        emailInput.addEventListener('input', function() {
+            const email = this.value;
+            // Expresión regular simple para comprobar formato básico de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !emailRegex.test(email)) {
+                // setCustomValidity muestra un mensaje de error nativo del navegador y hace que el input sea inválido
+                this.setCustomValidity('Por favor ingrese un correo válido');
+            } else {
+                // Limpia el mensaje de error personalizado para permitir el envío si todo es correcto
+                this.setCustomValidity('');
+            }
+        });
+
+        // Nota adicional para el desarrollador:
+        // - En el servidor, procese $_POST['email'] y $_POST['password'] de forma segura.
+        // - Use HTTPS, prepared statements (SQL) y password_hash/password_verify en PHP.
+        // - Considere añadir manejo de errores y mensajes de usuario en la propia página (no sólo redirecciones).
+    </script>
+</body>
+</html>
